@@ -1,45 +1,40 @@
+'use server'
+
 import { createClient } from '@/utils/supabase/server'
-import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-export async function login(formData: FormData) {
-    'use server'
-
+export async function signInWithOtp(formData: FormData) {
     const email = formData.get('email') as string
-    const password = formData.get('password') as string
     const supabase = await createClient()
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithOtp({
         email,
-        password,
+        options: {
+            shouldCreateUser: true, // Allow sign up via OTP
+        }
     })
 
     if (error) {
-        return redirect('/login?message=Could not authenticate user')
+        return { error: error.message }
     }
 
-    return redirect('/dashboard')
+    return { success: true }
 }
 
-export async function signup(formData: FormData) {
-    'use server'
-
-    const origin = (await headers()).get('origin')
+export async function verifyOtp(formData: FormData) {
     const email = formData.get('email') as string
-    const password = formData.get('password') as string
+    const token = formData.get('token') as string
     const supabase = await createClient()
 
-    const { error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.verifyOtp({
         email,
-        password,
-        options: {
-            emailRedirectTo: `${origin}/auth/callback`,
-        },
+        token,
+        type: 'email',
     })
 
     if (error) {
-        return redirect(`/login?message=${encodeURIComponent(error.message)}`)
+        return { error: error.message }
     }
 
-    return redirect('/login?message=Check email to continue sign in process')
+    redirect('/dashboard')
 }

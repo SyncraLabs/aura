@@ -16,7 +16,7 @@ export default function LandingPage() {
             <Link className="text-sm font-medium text-muted-foreground hover:text-white transition-colors" href="/login">
               Sign In
             </Link>
-            <Link href="/signup">
+            <Link href="/login">
               <Button variant="outline" className="rounded-full px-6 h-8 text-xs border-white/20 hover:bg-white/10 hover:text-white bg-transparent">
                 Get Started
               </Button>
@@ -46,7 +46,7 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Link href="/signup">
+              <Link href="/login">
                 <Button size="lg" className="rounded-full px-8 h-12 text-base bg-white text-black hover:bg-gray-200">
                   Start Free Trial
                 </Button>
