@@ -6,7 +6,7 @@ import sharp from 'sharp'
 
 // We don't use 'openai' SDK for the generation call to allow custom params ('input_fidelity', 'gpt-image-1.5')
 // but we keep the key.
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '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'
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || ''
 
 export async function generateTransformation(formData: FormData) {

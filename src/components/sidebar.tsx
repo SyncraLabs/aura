@@ -47,31 +47,33 @@ export function Sidebar() {
     }
 
     return (
-        <div className="hidden md:flex w-64 border-r bg-card h-screen flex-col">
-            <div className="p-6 border-b border-white/5">
-                <h1 className="text-2xl font-serif italic text-white tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+        <div className="hidden md:flex w-72 border-r border-white/5 bg-black h-screen flex-col selection:bg-white/20">
+            <div className="p-8 border-b border-white/5">
+                <h1 className="text-3xl font-serif italic text-white tracking-tight">
                     Aura
                 </h1>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">AI Beauty Clinic</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-[0.25em] mt-2 font-medium">Aesthetic Intelligence</p>
             </div>
 
-            <nav className="flex-1 p-4 space-y-2">
+            <nav className="flex-1 p-6 space-y-1">
                 {sidebarItems.map((item) => (
                     <Link key={item.href} href={item.href}>
                         <span className={cn(
-                            "flex items-center gap-3 px-4 py-3 rounded-md transition-colors",
-                            pathname === item.href ? "bg-primary/10 text-primary" : "hover:bg-muted text-muted-foreground"
+                            "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 text-sm font-medium",
+                            pathname === item.href
+                                ? "bg-white text-black shadow-lg shadow-white/10"
+                                : "text-muted-foreground hover:text-white hover:bg-white/5"
                         )}>
-                            <item.icon className="h-5 w-5" />
+                            <item.icon className={cn("h-4 w-4", pathname === item.href ? "text-black" : "text-muted-foreground group-hover:text-white")} />
                             {item.title}
                         </span>
                     </Link>
                 ))}
             </nav>
 
-            <div className="p-4 border-t">
-                <Button variant="ghost" className="w-full justify-start gap-3" onClick={handleSignOut}>
-                    <LogOut className="h-5 w-5" />
+            <div className="p-6 border-t border-white/5">
+                <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground hover:text-white hover:bg-white/5 rounded-xl h-12" onClick={handleSignOut}>
+                    <LogOut className="h-4 w-4" />
                     Sign Out
                 </Button>
             </div>

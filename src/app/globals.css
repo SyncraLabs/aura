@@ -11,39 +11,44 @@
 }
 
 :root {
-  /* Default to Dark Mode aesthetics as primary for "AI" feel */
-  --background: oklch(0.10 0.05 260);
-  /* Deep Navy/Black */
-  --foreground: oklch(0.98 0 0);
+  /* Minimalist Premium Dark Theme */
+  --background: 0 0% 0%;
+  /* #000000 */
+  --foreground: 0 0% 96%;
+  /* #f5f5f7 */
 
-  --card: oklch(0.15 0.05 260);
-  /* Slightly lighter navy */
-  --card-foreground: oklch(0.98 0 0);
+  --card: 0 0% 11%;
+  /* #1c1c1e */
+  --card-foreground: 0 0% 96%;
 
-  --popover: oklch(0.15 0.05 260);
-  --popover-foreground: oklch(0.98 0 0);
+  --popover: 0 0% 11%;
+  --popover-foreground: 0 0% 96%;
 
-  /* Blue/Green "Aurora" Theme */
-  --primary: oklch(0.7 0.15 170);
-  /* Teal/Green */
-  --primary-foreground: oklch(0.1 0.05 170);
+  --primary: 210 100% 58%;
+  /* #2997ff Apple Blue or similar */
+  --primary-foreground: 0 0% 100%;
 
-  --secondary: oklch(0.6 0.15 220);
-  /* Blue/Cyan */
-  --secondary-foreground: oklch(0.98 0 0);
+  --secondary: 0 0% 18%;
+  /* #2c2c2e */
+  --secondary-foreground: 0 0% 96%;
 
-  --accent: oklch(0.75 0.15 150);
-  /* Green Accent */
-  --accent-foreground: oklch(0.1 0.05 150);
+  --muted: 0 0% 18%;
+  --muted-foreground: 0 0% 60%;
+  /* #98989d */
 
-  --destructive: oklch(0.5 0.2 20);
-  --destructive-foreground: oklch(0.98 0 0);
+  --accent: 270 50% 40%;
+  /* Subtle Purple */
+  --accent-foreground: 0 0% 100%;
 
-  --border: oklch(0.25 0.05 260);
-  --input: oklch(0.25 0.05 260);
-  --ring: oklch(0.6 0.25 300);
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 96%;
 
-  --radius: 0.75rem;
+  --border: 0 0% 20%;
+  --input: 0 0% 20%;
+  --ring: 210 100% 58%;
+
+  --radius: 1.5rem;
+  /* More rounded, modern */
 }
 
 /* Force Dark Mode visuals even without class if we want "AI" look */
@@ -86,16 +91,15 @@
   body {
     @apply bg-background text-foreground tracking-wide;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
-    background: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #000000 100%);
   }
 
   /* Glassmorphism Utilities */
   .glass {
-    @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl;
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg;
   }
 
   .glass-card {
-    @apply bg-card/60 backdrop-blur-md border border-white/5;
+    @apply bg-card/80 backdrop-blur-md border border-white/5;
   }
 
   /* Text Gradients */
