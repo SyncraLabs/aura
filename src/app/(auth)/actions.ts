@@ -3,29 +3,34 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
-export async function signInWithOtp(formData: FormData) {
+export async function login(formData: FormData) {
     const email = formData.get('email') as string
-
-    // 1. Validate Config Formats
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    console.log("Checking Config:", { url, keyPrefix: key?.substring(0, 5) })
-
-    if (!url || !url.startsWith('https://')) {
-        return { error: `Config Error: Supabase URL is invalid. It looks like '${url?.substring(0, 10)}...'. It MUST start with 'https://'. Check Vercel Settings.` }
-    }
-    if (!key || !key.startsWith('eyJ')) {
-        return { error: `Config Error: Anon Key is invalid. It MUST start with 'eyJ'. Check Vercel Settings.` }
-    }
-
+    const password = formData.get('password') as string
     const supabase = await createClient()
 
-    // unified flow: works for both login and signup
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithPassword({
         email,
+        password,
+    })
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    return { success: true }
+}
+
+export async function signup(formData: FormData) {
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+    const supabase = await createClient()
+
+    const { error } = await supabase.auth.signUp({
+        email,
+        password,
         options: {
-            shouldCreateUser: true,
+            // Forcing email verification so we can use the Code flow
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/callback`,
         }
     })
 
@@ -36,7 +41,7 @@ export async function signInWithOtp(formData: FormData) {
     return { success: true }
 }
 
-export async function verifyOtp(formData: FormData) {
+export async function verify(formData: FormData) {
     const email = formData.get('email') as string
     const token = formData.get('token') as string
     const supabase = await createClient()
@@ -44,7 +49,7 @@ export async function verifyOtp(formData: FormData) {
     const { error } = await supabase.auth.verifyOtp({
         email,
         token,
-        type: 'email',
+        type: 'signup', // Verifying the signup email
     })
 
     if (error) {

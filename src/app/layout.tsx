@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         {children}
         <div className="fixed bottom-0 right-0 p-1 text-[8px] text-white/10 pointer-events-none z-50">
-          v2.1-auth-redo-{new Date().toISOString()}
+          v3.0-password-auth-{new Date().toISOString()}
         </div>
       </body>
     </html>
