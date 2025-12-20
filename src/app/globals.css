@@ -78,7 +78,8 @@
 
   /* Glassmorphism Utilities */
   .glass {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)];
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   }
 
   .glass-card {
@@ -92,15 +93,15 @@
 
   /* Glow Effects */
   .glow-blue {
-    @apply shadow-[0_0_20px_rgba(34, 211, 238, 0.5)];
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
   }
 
   .glow-purple {
-    @apply shadow-[0_0_20px_rgba(168, 85, 247, 0.5)];
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
   }
 
   .glow-green {
-    @apply shadow-[0_0_20px_rgba(52, 211, 153, 0.5)];
+    box-shadow: 0 0 20px rgba(52, 211, 153, 0.5);
   }
 
   .mask-fade-sides {
