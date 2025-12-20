@@ -7,18 +7,16 @@ export async function signInWithOtp(formData: FormData) {
     const email = formData.get('email') as string
     const supabase = await createClient()
 
+    // unified flow: works for both login and signup
     const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-            shouldCreateUser: true, // Allow sign up via OTP
+            shouldCreateUser: true,
         }
     })
 
     if (error) {
-        console.error("Supabase Auth Error:", error.message)
-        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'MISSING'
-        const maskedKey = key.substring(0, 10) + '...'
-        return { error: `${error.message} (Key used: ${maskedKey})` }
+        return { error: error.message }
     }
 
     return { success: true }
@@ -36,10 +34,7 @@ export async function verifyOtp(formData: FormData) {
     })
 
     if (error) {
-        console.error("Supabase Verify Error:", error.message)
-        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'MISSING'
-        const maskedKey = key.substring(0, 10) + '...'
-        return { error: `${error.message} (Key used: ${maskedKey})` }
+        return { error: error.message }
     }
 
     redirect('/dashboard')

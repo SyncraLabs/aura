@@ -38,9 +38,19 @@ export default function LoginPage() {
         }
     }
 
+    const handleResend = async () => {
+        setLoading(true)
+        setError(null)
+        const formData = new FormData()
+        formData.append('email', email)
+        const res = await signInWithOtp(formData)
+        setLoading(false)
+        if (res?.error) setError(res.error)
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden selection:bg-accent/30">
-            {/* Ambient Glows (Vibrant) */}
+            {/* Ambient Glows (Design 2.0) */}
             <div className="absolute top-[-20%] left-[-20%] w-[800px] h-[800px] bg-blue-600/20 blur-[150px] rounded-full pointer-events-none mix-blend-screen animate-in fade-in duration-1000" />
             <div className="absolute bottom-[-20%] right-[-20%] w-[800px] h-[800px] bg-purple-600/20 blur-[150px] rounded-full pointer-events-none mix-blend-screen animate-in fade-in duration-1000 delay-300" />
 
@@ -62,21 +72,21 @@ export default function LoginPage() {
                                 id="email"
                                 name="email"
                                 type="email"
-                                placeholder="clinic@aura.ai"
+                                placeholder="name@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="bg-black/20 border-white/10 text-white placeholder:text-white/20 focus:border-primary/50 focus:bg-white/5 focus:ring-1 focus:ring-primary/50 transition-all h-12 rounded-xl font-sans"
+                                className="bg-black/20 border-white/10 text-white placeholder:text-white/20 focus:border-cyan-400/50 focus:bg-white/5 focus:ring-1 focus:ring-cyan-400/50 transition-all h-12 rounded-xl font-sans"
                             />
                         </div>
                         <Button disabled={loading} className="w-full bg-white text-black hover:bg-cyan-50 border-0 transition-all h-12 rounded-xl font-medium font-sans mt-4 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(34,211,238,0.3)]">
-                            {loading ? 'Sending Code...' : 'Continue with Email'}
+                            {loading ? 'Sending Code...' : 'Get Login Code'}
                         </Button>
                     </form>
                 ) : (
                     <form action={handleOtpSubmit} className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-300">
                         <div className="space-y-2">
-                            <Label htmlFor="token" className="text-[10px] uppercase tracking-widest text-muted-foreground pl-1 font-sans">Enter 6-Digit Code</Label>
+                            <Label htmlFor="token" className="text-[10px] uppercase tracking-widest text-muted-foreground pl-1 font-sans">6-Digit Code</Label>
                             <Input
                                 id="token"
                                 name="token"
@@ -88,11 +98,18 @@ export default function LoginPage() {
                             />
                         </div>
                         <Button disabled={loading} className="w-full bg-indigo-500 hover:bg-indigo-400 text-white border-0 transition-all h-12 rounded-xl font-medium font-sans mt-4 shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)]">
-                            {loading ? 'Verifying...' : 'Verify & Login'}
+                            {loading ? 'Verifying...' : 'Verify Code'}
                         </Button>
-                        <button type="button" onClick={() => setStep('email')} className="w-full text-xs text-muted-foreground hover:text-white mt-4 underline underline-offset-4 font-sans">
-                            Wrong email? Go back
-                        </button>
+
+                        <div className="flex justify-between items-center mt-6">
+                            <button type="button" onClick={() => setStep('email')} className="text-xs text-muted-foreground hover:text-white transition-colors underline underline-offset-4 font-sans">
+                                Change Email
+                            </button>
+                            <button type="button" onClick={handleResend} disabled={loading} className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors font-sans">
+                                Resend Code
+                            </button>
+                        </div>
+
                     </form>
                 )}
 
@@ -102,6 +119,9 @@ export default function LoginPage() {
                         <span className="relative z-10">{error}</span>
                     </div>
                 )}
+            </div>
+            <div className="absolute bottom-6 text-[10px] text-white/20 font-sans tracking-widest uppercase">
+                Secure Access • Design 2.0
             </div>
         </div>
     )
