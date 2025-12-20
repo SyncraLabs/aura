@@ -43,6 +43,9 @@ export default function AuthPage() {
 
         if (res?.error) {
             setError(res.error)
+        } else if (res?.session) {
+            // Auto-confirmed (e.g. Email Confirmations Disabled in Supabase)
+            router.push('/dashboard')
         } else {
             setStep('verify') // Move to OTP entry
         }

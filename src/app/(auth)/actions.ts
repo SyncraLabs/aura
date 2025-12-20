@@ -25,7 +25,7 @@ export async function signup(formData: FormData) {
     const password = formData.get('password') as string
     const supabase = await createClient()
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -36,6 +36,11 @@ export async function signup(formData: FormData) {
 
     if (error) {
         return { error: error.message }
+    }
+
+    // Capture explicit session if email confirmation is disabled
+    if (data.session) {
+        return { success: true, session: true }
     }
 
     return { success: true }
