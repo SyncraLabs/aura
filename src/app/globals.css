@@ -7,54 +7,42 @@
 @theme {
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
-  /* Scholar/Premium Font */
 }
 
 :root {
-  /* Minimalist Premium Dark Theme */
-  --background: 0 0% 0%;
-  /* #000000 */
-  --foreground: 0 0% 96%;
-  /* #f5f5f7 */
+  /* Design 2.0: Vibrant Minimalist */
+  --background: 240 10% 3.9%;
+  /* Deep Dark Blue-Black */
+  --foreground: 0 0% 98%;
 
-  --card: 0 0% 11%;
-  /* #1c1c1e */
-  --card-foreground: 0 0% 96%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
 
-  --popover: 0 0% 11%;
-  --popover-foreground: 0 0% 96%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
 
-  --primary: 210 100% 58%;
-  /* #2997ff Apple Blue or similar */
-  --primary-foreground: 0 0% 100%;
+  --primary: 190 100% 50%;
+  /* Electric Cyan/Blue */
+  --primary-foreground: 240 5.9% 10%;
 
-  --secondary: 0 0% 18%;
-  /* #2c2c2e */
-  --secondary-foreground: 0 0% 96%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
 
-  --muted: 0 0% 18%;
-  --muted-foreground: 0 0% 60%;
-  /* #98989d */
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
 
-  --accent: 270 50% 40%;
-  /* Subtle Purple */
-  --accent-foreground: 0 0% 100%;
+  --accent: 260 100% 60%;
+  /* Electric Purple */
+  --accent-foreground: 0 0% 98%;
 
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 0 0% 96%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
 
-  --border: 0 0% 20%;
-  --input: 0 0% 20%;
-  --ring: 210 100% 58%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 240 4.9% 83.9%;
 
-  --radius: 1.5rem;
-  /* More rounded, modern */
-}
-
-/* Force Dark Mode visuals even without class if we want "AI" look */
-/* But keeping .dark class support for flexibility */
-.dark {
-  /* Same as root for now, as we want dark by default */
+  --radius: 1rem;
 }
 
 @theme inline {
@@ -95,15 +83,32 @@
 
   /* Glassmorphism Utilities */
   .glass {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg;
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_4px_30px_rgba(0, 0, 0, 0.1)];
   }
 
   .glass-card {
-    @apply bg-card/80 backdrop-blur-md border border-white/5;
+    @apply bg-gray-900/40 backdrop-blur-2xl border border-white/10 shadow-xl;
   }
 
   /* Text Gradients */
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-primary to-blue-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-emerald-400;
+  }
+
+  /* Glow Effects */
+  .glow-blue {
+    @apply shadow-[0_0_20px_rgba(34, 211, 238, 0.5)];
+  }
+
+  .glow-purple {
+    @apply shadow-[0_0_20px_rgba(168, 85, 247, 0.5)];
+  }
+
+  .glow-green {
+    @apply shadow-[0_0_20px_rgba(52, 211, 153, 0.5)];
+  }
+
+  .mask-fade-sides {
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   }
 }

@@ -255,7 +255,7 @@ export default function CameraPage() {
                                     className={`
                                         flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-medium transition-all snap-start border backdrop-blur-md
                                         ${selectedService === s.name
-                                            ? 'bg-primary/90 border-primary text-black shadow-[0_0_20px_rgba(56,189,248,0.3)]'
+                                            ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]'
                                             : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10'}
                                     `}
                                 >
@@ -271,7 +271,7 @@ export default function CameraPage() {
                             <Button
                                 onClick={handleGenerate}
                                 disabled={!selectedService}
-                                className="flex-[2] bg-gradient-to-r from-teal-500 to-emerald-500 text-black font-bold h-12 rounded-xl shadow-[0_0_20px_rgba(20,184,166,0.2)] disabled:opacity-50 disabled:shadow-none text-xs uppercase tracking-widest"
+                                className="flex-[2] bg-white text-black hover:bg-gray-200 font-bold h-12 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] disabled:opacity-50 disabled:shadow-none text-xs uppercase tracking-widest transition-all"
                             >
                                 <Zap className="h-4 w-4 mr-2" />
                                 Generate

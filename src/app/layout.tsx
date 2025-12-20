@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond } from "next/font/google"; // Premium fonts
+import { Space_Grotesk, Cormorant_Garamond } from "next/font/google"; // Space Grotesk has that 'ink trap' tech vibe
 import "./globals.css";
 
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
   variable: "--font-sans",
   subsets: ["latin"],
 });
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${cormorant.variable} antialiased bg-black text-white selection:bg-white/20`}
+        className={`${spaceGrotesk.variable} ${cormorant.variable} antialiased bg-black text-white selection:bg-purple-500/30`}
       >
         {children}
       </body>
