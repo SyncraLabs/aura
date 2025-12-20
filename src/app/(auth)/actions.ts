@@ -58,3 +58,22 @@ export async function verify(formData: FormData) {
 
     redirect('/dashboard')
 }
+
+export async function resend(formData: FormData) {
+    const email = formData.get('email') as string
+    const supabase = await createClient()
+
+    const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email,
+        options: {
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/callback`,
+        }
+    })
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    return { success: true }
+}

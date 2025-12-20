@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { login, signup, verify } from '../actions'
+import { login, signup, verify, resend } from '../actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -15,6 +15,7 @@ export default function AuthPage() {
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [resendStatus, setResendStatus] = useState<string | null>(null) // New state
 
     // Handle Login (Email + Password)
     const handleLogin = async (formData: FormData) => {
@@ -62,6 +63,25 @@ export default function AuthPage() {
         // verify action handles redirect on success
     }
 
+    // Handle Resend
+    const handleResend = async () => {
+        setLoading(true)
+        setError(null)
+        setResendStatus(null)
+
+        const formData = new FormData()
+        formData.append('email', email)
+
+        const res = await resend(formData)
+        setLoading(false)
+
+        if (res?.error) {
+            setError(res.error)
+        } else {
+            setResendStatus("New code sent! Check your inbox.")
+        }
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden selection:bg-accent/30 font-sans">
             {/* Ambient Glows */}
@@ -82,7 +102,10 @@ export default function AuthPage() {
                     <form action={handleVerify} className="space-y-6 animate-in slide-in-from-right-8 fade-in duration-300">
                         <div className="space-y-2 text-center">
                             <p className="text-xs text-muted-foreground">
-                                We sent a code to <span className="text-white">{email}</span>
+                                We sent a code to <span className="text-white font-medium">{email}</span>.
+                            </p>
+                            <p className="text-[10px] text-muted-foreground/60">
+                                (Check your Spam folder!)
                             </p>
                             <Input
                                 name="token"
@@ -97,7 +120,7 @@ export default function AuthPage() {
                             {loading ? 'Verifying...' : 'Complete Sign Up'}
                         </Button>
                         <button type="button" onClick={() => setStep('form')} className="w-full text-xs text-muted-foreground hover:text-white mt-4 underline underline-offset-4">
-                            Back
+                            Wrong email? Try again
                         </button>
                     </form>
                 ) : (
