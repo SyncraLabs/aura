@@ -3,7 +3,7 @@ import { Space_Grotesk, Cormorant_Garamond } from "next/font/google"; // Space G
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
-  variable: "--font-sans",
+  variable: "--font-opensauce",
   subsets: ["latin"],
 });
 
@@ -27,11 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${spaceGrotesk.variable} ${cormorant.variable} antialiased bg-black text-white selection:bg-purple-500/30`}
+        className={`${spaceGrotesk.variable} ${cormorant.variable} antialiased bg-black text-white selection:bg-emerald-500/30`}
       >
         {children}
         <div className="fixed bottom-0 right-0 p-1 text-[8px] text-white/10 pointer-events-none z-50">
-          v3.0-password-auth-{new Date().toISOString()}
+          v4.0-cool-minimalist-{new Date().toISOString()}
         </div>
       </body>
     </html>

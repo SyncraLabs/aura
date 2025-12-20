@@ -87,9 +87,9 @@ export default function AuthPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden selection:bg-accent/30 font-sans">
-            {/* Ambient Glows */}
+            {/* Ambient Glows: Blue & Green */}
             <div className="absolute top-[-20%] left-[-20%] w-[800px] h-[800px] bg-blue-600/20 blur-[150px] rounded-full pointer-events-none mix-blend-screen animate-in fade-in duration-1000" />
-            <div className="absolute bottom-[-20%] right-[-20%] w-[800px] h-[800px] bg-purple-600/20 blur-[150px] rounded-full pointer-events-none mix-blend-screen animate-in fade-in duration-1000 delay-300" />
+            <div className="absolute bottom-[-20%] right-[-20%] w-[800px] h-[800px] bg-emerald-600/20 blur-[150px] rounded-full pointer-events-none mix-blend-screen animate-in fade-in duration-1000 delay-300" />
 
             <div className="w-full max-w-sm p-8 glass-card rounded-3xl border border-white/10 shadow-2xl relative z-10 backdrop-blur-3xl">
                 <div className="text-center mb-8 space-y-2">
@@ -116,10 +116,10 @@ export default function AuthPage() {
                                 placeholder="123456"
                                 required
                                 autoFocus
-                                className="bg-black/20 border-white/10 text-white placeholder:text-white/20 focus:border-purple-500/50 focus:bg-white/5 focus:ring-1 focus:ring-purple-500/50 transition-all h-12 rounded-xl text-center tracking-[0.5em] text-lg font-sans mt-4"
+                                className="bg-black/20 border-white/10 text-white placeholder:text-white/20 focus:border-emerald-500/50 focus:bg-white/5 focus:ring-1 focus:ring-emerald-500/50 transition-all h-12 rounded-xl text-center tracking-[0.5em] text-lg font-sans mt-4"
                             />
                         </div>
-                        <Button disabled={loading} className="w-full bg-indigo-500 hover:bg-indigo-400 text-white border-0 transition-all h-12 rounded-xl font-medium mt-4 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
+                        <Button disabled={loading} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white border-0 transition-all h-12 rounded-xl font-medium mt-4 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
                             {loading ? 'Verifying...' : 'Complete Sign Up'}
                         </Button>
                         <button type="button" onClick={() => setStep('form')} className="w-full text-xs text-muted-foreground hover:text-white mt-4 underline underline-offset-4">
@@ -153,13 +153,13 @@ export default function AuthPage() {
                             <form action={handleSignup} className="space-y-4 animate-in fade-in duration-300">
                                 <div className="space-y-2">
                                     <Label className="text-[10px] uppercase tracking-widest text-muted-foreground pl-1">Email</Label>
-                                    <Input name="email" type="email" required placeholder="name@example.com" className="bg-black/20 border-white/10 text-white focus:border-purple-500/50 h-11 rounded-lg" />
+                                    <Input name="email" type="email" required placeholder="name@example.com" className="bg-black/20 border-white/10 text-white focus:border-emerald-500/50 h-11 rounded-lg" />
                                 </div>
                                 <div className="space-y-2">
                                     <Label className="text-[10px] uppercase tracking-widest text-muted-foreground pl-1">Password</Label>
-                                    <Input name="password" type="password" required placeholder="Create a password" className="bg-black/20 border-white/10 text-white focus:border-purple-500/50 h-11 rounded-lg" />
+                                    <Input name="password" type="password" required placeholder="Create a password" className="bg-black/20 border-white/10 text-white focus:border-emerald-500/50 h-11 rounded-lg" />
                                 </div>
-                                <Button disabled={loading} className="w-full bg-indigo-500 hover:bg-indigo-400 text-white h-11 rounded-lg font-medium mt-6 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
+                                <Button disabled={loading} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white h-11 rounded-lg font-medium mt-6 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
                                     {loading ? 'Creating Account...' : 'Sign Up'}
                                 </Button>
                             </form>

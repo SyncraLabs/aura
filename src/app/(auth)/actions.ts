@@ -2,8 +2,10 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 
 export async function login(formData: FormData) {
+    // ... (unchanged)
     const email = formData.get('email') as string
     const password = formData.get('password') as string
     const supabase = await createClient()
@@ -24,13 +26,22 @@ export async function signup(formData: FormData) {
     const email = formData.get('email') as string
     const password = formData.get('password') as string
     const supabase = await createClient()
+    const origin = (await headers()).get('origin')
+
+    console.log("-----------------------------------------")
+    console.log("DEBUG SIGNUP:")
+    console.log("Email:", email)
+    console.log("Origin Header:", origin)
+    console.log("Constructed Redirect:", `${origin}/auth/callback`)
+    console.log("Env URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
+    console.log("-----------------------------------------")
 
     const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-            // Forcing email verification so we can use the Code flow
-            emailRedirectTo: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/callback`,
+            // Dynamic Redirect: Works for Localhost AND Vercel automatically
+            emailRedirectTo: `${origin}/auth/callback`,
         }
     })
 
@@ -47,6 +58,7 @@ export async function signup(formData: FormData) {
 }
 
 export async function verify(formData: FormData) {
+    // ... identity verification (unchanged)
     const email = formData.get('email') as string
     const token = formData.get('token') as string
     const supabase = await createClient()
@@ -67,12 +79,13 @@ export async function verify(formData: FormData) {
 export async function resend(formData: FormData) {
     const email = formData.get('email') as string
     const supabase = await createClient()
+    const origin = (await headers()).get('origin')
 
     const { error } = await supabase.auth.resend({
         type: 'signup',
         email,
         options: {
-            emailRedirectTo: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/callback`,
+            emailRedirectTo: `${origin}/auth/callback`,
         }
     })
 
