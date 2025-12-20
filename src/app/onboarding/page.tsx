@@ -81,7 +81,7 @@ export default function OnboardingPage() {
     return (
         <div className="max-w-xl mx-auto py-10">
             <h1 className="text-3xl font-light mb-2">Setup your Clinic</h1>
-            <p className="text-muted-foreground mb-8">Let's customize your AI experience.</p>
+            <p className="text-muted-foreground mb-8">Let&apos;s customize your AI experience.</p>
 
             <Card className="p-8">
                 {step === 1 && (

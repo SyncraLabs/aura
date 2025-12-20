@@ -50,7 +50,7 @@ export default function LandingPage() {
             <p className="max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed font-light tracking-wide">
               Advanced context-aware simulation for elite aesthetic clinics.
               <br />
-              <span className="text-white/40 text-sm mt-2 block font-mono">Powered by Gemini 1.5 & GPT-4o</span>
+              <span className="text-white/40 text-sm mt-2 block font-mono">Powered by Gemini 1.5 &amp; GPT-4o</span>
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
