@@ -87,6 +87,12 @@
     @apply bg-gray-900/40 backdrop-blur-2xl border border-white/10 shadow-xl;
   }
 
+  /* Force Glass Effect on ALL Inputs */
+  input,
+  textarea {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 text-white placeholder:text-white/20 focus:border-emerald-500/50 focus:bg-white/10 focus:ring-1 focus:ring-emerald-500/50 transition-all !important;
+  }
+
   /* Text Gradients */
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-emerald-400;

@@ -29,7 +29,7 @@ export default async function Layout({
     return (
         <div className="flex flex-col min-h-screen">
             <header className="border-b p-4 flex justify-between items-center bg-card">
-                <span className="font-bold">Beauty Clinic AI</span>
+                <span className="font-bold">Aura</span>
                 <span className="text-sm text-muted-foreground">{user.email}</span>
             </header>
             <main className="flex-1 p-8">

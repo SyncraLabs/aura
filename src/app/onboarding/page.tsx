@@ -80,14 +80,14 @@ export default function OnboardingPage() {
 
     return (
         <div className="max-w-xl mx-auto py-10">
-            <h1 className="text-3xl font-light mb-2">Setup your Clinic</h1>
+            <h1 className="text-3xl font-light mb-2">Setup your Business</h1>
             <p className="text-muted-foreground mb-8">Let&apos;s customize your AI experience.</p>
 
             <Card className="p-8">
                 {step === 1 && (
                     <div className="space-y-4">
                         <div className="grid gap-2">
-                            <Label>Clinic Name</Label>
+                            <Label>Business Name</Label>
                             <Input name="name" value={formData.name} onChange={handleInputChange} placeholder="e.g. Bright Smiles" />
                         </div>
                         <div className="grid gap-2">

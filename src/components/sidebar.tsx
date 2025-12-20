@@ -52,7 +52,7 @@ export function Sidebar() {
                 <h1 className="text-3xl font-serif italic text-white tracking-tight">
                     Aura
                 </h1>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-[0.25em] mt-2 font-medium">Aesthetic Intelligence</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-[0.25em] mt-2 font-medium">Business Intelligence</p>
             </div>
 
             <nav className="flex-1 p-6 space-y-1">

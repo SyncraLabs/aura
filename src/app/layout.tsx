@@ -15,7 +15,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Aura | AI Beauty Clinic",
+  title: "Aura | Business Intelligence",
   description: "Transform your look with advanced AI.",
 };
 
