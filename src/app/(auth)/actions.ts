@@ -15,7 +15,10 @@ export async function signInWithOtp(formData: FormData) {
     })
 
     if (error) {
-        return { error: error.message }
+        console.error("Supabase Auth Error:", error.message)
+        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'MISSING'
+        const maskedKey = key.substring(0, 10) + '...'
+        return { error: `${error.message} (Key used: ${maskedKey})` }
     }
 
     return { success: true }
@@ -33,7 +36,10 @@ export async function verifyOtp(formData: FormData) {
     })
 
     if (error) {
-        return { error: error.message }
+        console.error("Supabase Verify Error:", error.message)
+        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'MISSING'
+        const maskedKey = key.substring(0, 10) + '...'
+        return { error: `${error.message} (Key used: ${maskedKey})` }
     }
 
     redirect('/dashboard')
