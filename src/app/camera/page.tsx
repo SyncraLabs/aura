@@ -179,23 +179,24 @@ export default function CameraPage() {
                 {resultSrc && imageSrc && (
                     <div
                         ref={containerRef}
-                        className="relative w-full h-full cursor-col-resize select-none touch-none"
+                        className="relative w-full h-full cursor-col-resize select-none touch-none bg-zinc-900" // Added dark bg
                         onPointerDown={handlePointerDown}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onDragStart={(e) => e.preventDefault()}
                     >
                         {/* Background (After) */}
-                        <div className="absolute inset-0 w-full h-full z-0">
+                        <div className="absolute inset-0 w-full h-full z-0 bg-blue-900/20"> {/* Debug BG */}
                             {/* Switched to standard img to avoid next/image whitelist issues causing black screen */}
                             <img
                                 src={resultSrc}
                                 alt="After"
-                                className="w-full h-full object-cover pointer-events-none select-none block"
+                                className="w-full h-full object-contain pointer-events-none select-none block" // Changed to object-contain to ensuring no cropping issues hide the image
                                 draggable={false}
                                 onError={(e) => {
                                     console.error("Result image failed to load:", resultSrc);
-                                    e.currentTarget.style.border = "2px solid red";
+                                    e.currentTarget.style.border = "4px solid red"; // Thicker border
+                                    e.currentTarget.style.backgroundColor = "rgba(255,0,0,0.1)";
                                 }}
                             />
                             <div className="absolute top-20 right-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 z-10">
@@ -205,7 +206,7 @@ export default function CameraPage() {
 
                         {/* Foreground (Before) - Clipped */}
                         <div
-                            className="absolute inset-0 w-full h-full overflow-hidden border-r-2 border-white/50 shadow-[0_0_20px_rgba(0,0,0,0.5)] z-20 pointer-events-none"
+                            className="absolute inset-0 w-full h-full overflow-hidden border-r-2 border-white/50 shadow-[0_0_20px_rgba(0,0,0,0.5)] z-20 pointer-events-none bg-emerald-900/20" // Debug BG
                             style={{ width: `${sliderPosition}%` }}
                         >
                             {/* Use percentage inverse to keep image static while clipping parent */}
@@ -213,7 +214,7 @@ export default function CameraPage() {
                                 <img
                                     src={imageSrc}
                                     alt="Before"
-                                    className="w-full h-full object-cover pointer-events-none select-none block"
+                                    className="w-full h-full object-contain pointer-events-none select-none block" // Changed to object-contain
                                     draggable={false}
                                 />
                             </div>
