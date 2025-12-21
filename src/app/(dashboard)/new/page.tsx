@@ -3,11 +3,9 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
 import { createClient } from '@/utils/supabase/client'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Upload, Wand2, ArrowRight, Image as ImageIcon } from 'lucide-react'
-import Image from 'next/image'
 import { generateTransformation } from './actions'
 
 export default function NewTransformationPage() {
@@ -15,6 +13,7 @@ export default function NewTransformationPage() {
     const [service, setService] = useState('whitening')
     const [isProcessing, setIsProcessing] = useState(false)
     const [resultImage, setResultImage] = useState<string | null>(null)
+    const [viewMode, setViewMode] = useState<'original' | 'result'>('original') // [NEW] Toggle state
 
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
@@ -25,6 +24,7 @@ export default function NewTransformationPage() {
             setSelectedImage(url)
             setSelectedFile(file)
             setResultImage(null)
+            setViewMode('original')
         }
     }
 
@@ -41,6 +41,7 @@ export default function NewTransformationPage() {
 
             if (result.success && result.imageUrl) {
                 setResultImage(result.imageUrl)
+                setViewMode('result')
             } else {
                 alert(`Generation failed: ${result.error}`)
             }
@@ -75,11 +76,8 @@ export default function NewTransformationPage() {
         fetchServices()
     }, [])
 
-    // ... existing handlers ...
-
     return (
         <div className="p-8 max-w-5xl mx-auto">
-            {/* ... existing header ... */}
             <div className="mb-8">
                 <h1 className="text-3xl font-light mb-2">New Client Transformation</h1>
                 <p className="text-muted-foreground">Upload a client photo and select a service to generate results.</p>
@@ -89,7 +87,6 @@ export default function NewTransformationPage() {
                 <div className="space-y-6">
                     <Card className="glass-card border-0 p-6">
                         <h3 className="text-lg font-medium mb-4">1. Upload Photo</h3>
-                        {/* ... existing upload ... */}
                         <div className="border border-white/10 border-dashed rounded-lg p-8 text-center hover:bg-white/5 transition-colors">
                             <input
                                 type="file"
@@ -126,8 +123,6 @@ export default function NewTransformationPage() {
                         )}
                     </Card>
 
-                    {/* ... existing button ... */}
-
                     <Button
                         size="lg"
                         className="w-full gap-2 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
@@ -158,11 +153,12 @@ export default function NewTransformationPage() {
                             </div>
                         ) : (
                             <div className="relative w-full h-full min-h-[400px]">
-                                {resultImage ? (
-                                    <div className="relative w-full h-full">
+                                {viewMode === 'result' && resultImage ? (
+                                    <div className="relative w-full h-full animate-in fade-in duration-300">
                                         <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-                                            <span className="bg-black/50 text-white px-3 py-1 rounded-full text-sm">After</span>
+                                            <span className="bg-emerald-500/80 backdrop-blur text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">After</span>
                                         </div>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={resultImage}
                                             alt="Result"
@@ -170,17 +166,18 @@ export default function NewTransformationPage() {
                                         />
                                     </div>
                                 ) : (
-                                    <div className="relative w-full h-full">
+                                    <div className="relative w-full h-full animate-in fade-in duration-300">
                                         <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-                                            <span className="bg-black/50 text-white px-3 py-1 rounded-full text-sm">Before</span>
+                                            <span className="bg-black/50 backdrop-blur text-white px-3 py-1 rounded-full text-sm">Before</span>
                                         </div>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={selectedImage}
                                             alt="Original"
                                             className="w-full h-full object-contain rounded-md"
                                         />
                                         {isProcessing && (
-                                            <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
+                                            <div className="absolute inset-0 bg-background/80 flex items-center justify-center backdrop-blur-sm z-20">
                                                 <div className="flex flex-col items-center">
                                                     <Wand2 className="h-8 w-8 animate-spin text-primary mb-2" />
                                                     <p className="text-sm font-medium animate-pulse">AI is working its magic...</p>
@@ -195,8 +192,12 @@ export default function NewTransformationPage() {
 
                     {resultImage && (
                         <div className="flex gap-2">
-                            <Button variant="outline" className="flex-1" onClick={() => setResultImage(null)}>
-                                Show Original
+                            <Button
+                                variant={viewMode === 'original' ? "default" : "outline"}
+                                className="flex-1"
+                                onClick={() => setViewMode(viewMode === 'original' ? 'result' : 'original')}
+                            >
+                                {viewMode === 'original' ? 'Show Result' : 'Show Original'}
                             </Button>
                             <Button className="flex-1 p-0" asChild>
                                 <a href={resultImage} download={`transformation-result-${Date.now()}.png`}>

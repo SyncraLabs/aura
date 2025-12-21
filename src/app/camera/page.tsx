@@ -186,9 +186,18 @@ export default function CameraPage() {
                         onDragStart={(e) => e.preventDefault()}
                     >
                         {/* Background (After) */}
-                        <div className="absolute inset-0 w-full h-full">
+                        <div className="absolute inset-0 w-full h-full z-0">
                             {/* Switched to standard img to avoid next/image whitelist issues causing black screen */}
-                            <img src={resultSrc} alt="After" className="w-full h-full object-cover pointer-events-none select-none" draggable={false} />
+                            <img
+                                src={resultSrc}
+                                alt="After"
+                                className="w-full h-full object-cover pointer-events-none select-none block"
+                                draggable={false}
+                                onError={(e) => {
+                                    console.error("Result image failed to load:", resultSrc);
+                                    e.currentTarget.style.border = "2px solid red";
+                                }}
+                            />
                             <div className="absolute top-20 right-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 z-10">
                                 <span className="text-[10px] uppercase tracking-widest text-primary font-bold">After</span>
                             </div>
@@ -200,8 +209,13 @@ export default function CameraPage() {
                             style={{ width: `${sliderPosition}%` }}
                         >
                             {/* Use percentage inverse to keep image static while clipping parent */}
-                            <div className="relative h-full" style={{ width: sliderPosition > 0 ? `${10000 / sliderPosition}%` : '100vw' }}>
-                                <img src={imageSrc} alt="Before" className="w-full h-full object-cover pointer-events-none select-none" draggable={false} />
+                            <div className="relative h-full" style={{ width: sliderPosition > 0 ? `${100 / (sliderPosition / 100)}%` : '100vw' }}>
+                                <img
+                                    src={imageSrc}
+                                    alt="Before"
+                                    className="w-full h-full object-cover pointer-events-none select-none block"
+                                    draggable={false}
+                                />
                             </div>
                             <div className="absolute top-20 left-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
                                 <span className="text-[10px] uppercase tracking-widest text-white/80">Before</span>
@@ -220,7 +234,7 @@ export default function CameraPage() {
                         </div>
 
                         {/* Download FAB */}
-                        <div className="absolute bottom-32 right-6 z-30">
+                        <div className="absolute bottom-32 right-6 z-30 pointer-events-auto">
                             <Button
                                 size="icon"
                                 className="rounded-full h-14 w-14 shadow-2xl bg-white text-black hover:bg-white/90 transition-transform hover:scale-105"
