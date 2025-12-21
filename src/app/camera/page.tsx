@@ -139,7 +139,20 @@ export default function CameraPage() {
                 <Button variant="ghost" size="icon" onClick={() => router.push('/dashboard')} className="text-white hover:bg-white/10 pointer-events-auto">
                     <ArrowLeft className="h-6 w-6" />
                 </Button>
-                <h1 className="text-sm font-medium tracking-widest uppercase text-white/80 font-serif italic">Quick Cam</h1>
+                <div className="text-center">
+                    <h1 className="text-sm font-medium tracking-widest uppercase text-white/80 font-serif italic">Quick Cam</h1>
+                    <button
+                        onClick={() => {
+                            // TEST MODE: Load fake images
+                            setImageSrc("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop")
+                            setResultSrc("https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop")
+                        }}
+                        className="pointer-events-auto text-[10px] text-red-500 bg-white/10 px-2 py-1 rounded mt-1 hover:bg-white/20"
+                    >
+                        DEBUG: LOAD TEST IMAGES
+                    </button>
+                    {imageSrc && <p className="text-[10px] text-green-500">Src Len: {imageSrc.length}</p>}
+                </div>
                 <div className="w-6" />
             </div>
 
