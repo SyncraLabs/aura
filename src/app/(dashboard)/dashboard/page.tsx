@@ -34,7 +34,7 @@ export default async function DashboardPage() {
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <Card>
+                <Card className="glass-card border-0">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Clients</CardTitle>
                     </CardHeader>
@@ -42,7 +42,7 @@ export default async function DashboardPage() {
                         <div className="text-2xl font-bold">0</div>
                     </CardContent>
                 </Card>
-                <Card>
+                <Card className="glass-card border-0">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Generated Images</CardTitle>
                     </CardHeader>
@@ -50,7 +50,7 @@ export default async function DashboardPage() {
                         <div className="text-2xl font-bold">0</div>
                     </CardContent>
                 </Card>
-                <Card>
+                <Card className="glass-card border-0">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Credits Remaining</CardTitle>
                     </CardHeader>
@@ -69,10 +69,10 @@ export default async function DashboardPage() {
                         </div>
                     ) : (
                         recent.map((item: any) => (
-                            <Card key={item.id} className="overflow-hidden">
-                                <div className="h-48 bg-muted relative">
+                            <Card key={item.id} className="glass-card border-0 overflow-hidden">
+                                <div className="h-48 relative">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src={item.after_image_url} alt="Result" className="object-cover w-full h-full" />
+                                    <img src={item.after_image_url} alt="Result" className="object-cover w-full h-full opacity-80 hover:opacity-100 transition-opacity" />
                                 </div>
                             </Card>
                         ))

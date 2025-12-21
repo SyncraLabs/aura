@@ -67,6 +67,8 @@ export default function CameraPage() {
         setError(null)
 
         try {
+            console.log("Starting generation for service:", selectedService)
+
             // Convert Base64 to Blob
             const res = await fetch(imageSrc)
             const blob = await res.blob()
@@ -76,16 +78,23 @@ export default function CameraPage() {
             formData.append('image', file)
             formData.append('service', selectedService)
 
+            console.log("Sending FormData to server action...")
+
             // Reuse the server action
             const result = await generateTransformation(formData)
+            console.log("Server action result:", result)
 
             if (result.success && result.imageUrl) {
+                console.log("Setting Result Src:", result.imageUrl)
+                // Force a cache-busting param if needed, or just set raw
                 setResultSrc(result.imageUrl)
             } else {
-                setError(result.error || "Generation failed")
+                console.error("Generation logic failed:", result.error)
+                setError(result.error || "Generation failed - No URL returned")
             }
         } catch (e: any) {
-            setError(e.message || "An unexpected error occurred")
+            console.error("Client Action Exception:", e)
+            setError(e.message || "An unexpected error occurred during generation")
         } finally {
             setLoading(false)
         }
@@ -187,11 +196,11 @@ export default function CameraPage() {
 
                         {/* Foreground (Before) - Clipped */}
                         <div
-                            className="absolute inset-0 w-full h-full overflow-hidden border-r-2 border-white/50 shadow-[0_0_20px_rgba(0,0,0,0.5)] z-20"
+                            className="absolute inset-0 w-full h-full overflow-hidden border-r-2 border-white/50 shadow-[0_0_20px_rgba(0,0,0,0.5)] z-20 pointer-events-none"
                             style={{ width: `${sliderPosition}%` }}
                         >
-                            {/* Force width to match parent container width so image doesn't squish */}
-                            <div className="relative h-full" style={{ width: '100vw' }}>
+                            {/* Use percentage inverse to keep image static while clipping parent */}
+                            <div className="relative h-full" style={{ width: sliderPosition > 0 ? `${10000 / sliderPosition}%` : '100vw' }}>
                                 <img src={imageSrc} alt="Before" className="w-full h-full object-cover pointer-events-none select-none" draggable={false} />
                             </div>
                             <div className="absolute top-20 left-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
@@ -201,10 +210,10 @@ export default function CameraPage() {
 
                         {/* Slider Handle */}
                         <div
-                            className="absolute top-0 bottom-0 w-1 bg-white/0 cursor-col-resize z-20 flex items-center justify-center group"
+                            className="absolute top-0 bottom-0 w-1 bg-white/0 cursor-col-resize z-20 flex items-center justify-center pointer-events-none"
                             style={{ left: `${sliderPosition}%` }}
                         >
-                            <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-xl border border-white/50 shadow-2xl flex items-center justify-center transform group-active:scale-110 transition-transform">
+                            <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-xl border border-white/50 shadow-2xl flex items-center justify-center transform transition-transform">
                                 <div className="w-1 h-4 bg-white/80 rounded mx-[1px]" />
                                 <div className="w-1 h-4 bg-white/80 rounded mx-[1px]" />
                             </div>

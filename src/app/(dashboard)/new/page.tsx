@@ -87,10 +87,10 @@ export default function NewTransformationPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
-                    <Card className="p-6">
+                    <Card className="glass-card border-0 p-6">
                         <h3 className="text-lg font-medium mb-4">1. Upload Photo</h3>
                         {/* ... existing upload ... */}
-                        <div className="border-2 border-dashed rounded-lg p-8 text-center hover:bg-muted/50 transition-colors">
+                        <div className="border border-white/10 border-dashed rounded-lg p-8 text-center hover:bg-white/5 transition-colors">
                             <input
                                 type="file"
                                 id="image-upload"
@@ -105,18 +105,18 @@ export default function NewTransformationPage() {
                         </div>
                     </Card>
 
-                    <Card className="p-6">
+                    <Card className="glass-card border-0 p-6">
                         <h3 className="text-lg font-medium mb-4">2. Select Service</h3>
                         {loadingServices ? (
                             <p className="text-sm text-muted-foreground">Loading services...</p>
                         ) : (
                             <Select value={service} onValueChange={setService}>
-                                <SelectTrigger>
+                                <SelectTrigger className="bg-white/5 border-white/10 text-white">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-black border-white/10 text-white">
                                     {services.map(s => (
-                                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                                        <SelectItem key={s} value={s} className="hover:bg-white/10 cursor-pointer">{s}</SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
@@ -130,7 +130,7 @@ export default function NewTransformationPage() {
 
                     <Button
                         size="lg"
-                        className="w-full gap-2"
+                        className="w-full gap-2 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                         disabled={!selectedImage || isProcessing}
                         onClick={handleGenerate}
                     >
@@ -150,7 +150,7 @@ export default function NewTransformationPage() {
 
                 {/* Preview Section */}
                 <div className="space-y-6">
-                    <Card className="p-6 min-h-[500px] flex flex-col items-center justify-center bg-muted/30">
+                    <Card className="glass-card border-0 p-6 min-h-[500px] flex flex-col items-center justify-center">
                         {!selectedImage ? (
                             <div className="text-center text-muted-foreground">
                                 <ImageIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
