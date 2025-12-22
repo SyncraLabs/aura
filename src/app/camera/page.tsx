@@ -141,17 +141,24 @@ export default function CameraPage() {
                 </Button>
                 <div className="text-center">
                     <h1 className="text-sm font-medium tracking-widest uppercase text-white/80 font-serif italic">Quick Cam</h1>
-                    <button
-                        onClick={() => {
-                            // TEST MODE: Load fake images
-                            setImageSrc("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop")
-                            setResultSrc("https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop")
-                        }}
-                        className="pointer-events-auto text-[10px] text-red-500 bg-white/10 px-2 py-1 rounded mt-1 hover:bg-white/20"
-                    >
-                        DEBUG: LOAD TEST IMAGES
-                    </button>
-                    {imageSrc && <p className="text-[10px] text-green-500">Src Len: {imageSrc.length}</p>}
+                    <div className="flex flex-col gap-1 items-center">
+                        <button
+                            onClick={() => {
+                                setImageSrc("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop")
+                                setResultSrc("https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop")
+                            }}
+                            className="pointer-events-auto text-[10px] text-red-500 bg-white/10 px-2 py-1 rounded hover:bg-white/20"
+                        >
+                            DEBUG: LOAD TEST IMAGES
+                        </button>
+                        <button
+                            onClick={() => setDebugMode(!debugMode)}
+                            className="pointer-events-auto text-[10px] text-cyan-500 bg-white/10 px-2 py-1 rounded hover:bg-white/20"
+                        >
+                            LAYOUT: {debugMode ? 'SPLIT' : 'SLIDER'}
+                        </button>
+                        {imageSrc && <p className="text-[10px] text-green-500 max-w-[200px] truncate">Start: {imageSrc.substring(0, 40)}</p>}
+                    </div>
                 </div>
                 <div className="w-6" />
             </div>
@@ -190,75 +197,92 @@ export default function CameraPage() {
 
                 {/* 3. Result View (Comparison) */}
                 {resultSrc && imageSrc && (
-                    <div
-                        ref={containerRef}
-                        className="relative w-full h-full cursor-col-resize select-none touch-none bg-zinc-900" // Added dark bg
-                        onPointerDown={handlePointerDown}
-                        onPointerMove={handlePointerMove}
-                        onPointerUp={handlePointerUp}
-                        onDragStart={(e) => e.preventDefault()}
-                    >
-                        {/* Background (After) */}
-                        <div className="absolute inset-0 w-full h-full z-0 bg-blue-900/20"> {/* Debug BG */}
-                            {/* Switched to standard img to avoid next/image whitelist issues causing black screen */}
-                            <img
-                                src={resultSrc}
-                                alt="After"
-                                className="w-full h-full object-contain pointer-events-none select-none block" // Changed to object-contain to ensuring no cropping issues hide the image
-                                draggable={false}
-                                onError={(e) => {
-                                    console.error("Result image failed to load:", resultSrc);
-                                    e.currentTarget.style.border = "4px solid red"; // Thicker border
-                                    e.currentTarget.style.backgroundColor = "rgba(255,0,0,0.1)";
-                                }}
-                            />
-                            <div className="absolute top-20 right-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 z-10">
-                                <span className="text-[10px] uppercase tracking-widest text-primary font-bold">After</span>
+                    debugMode ? (
+                        // DEBUG VIEW: Simple Split
+                        <div className="absolute inset-0 bg-black flex z-50 overflow-auto">
+                            <div className="flex-1 border-r border-white/20 relative">
+                                <p className="absolute top-2 left-2 text-white bg-black/50 px-2">Before</p>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={imageSrc} className="w-full h-full object-contain" alt="Before Debug" />
+                            </div>
+                            <div className="flex-1 relative">
+                                <p className="absolute top-2 left-2 text-white bg-black/50 px-2">After</p>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={resultSrc} className="w-full h-full object-contain" alt="After Debug" />
                             </div>
                         </div>
-
-                        {/* Foreground (Before) - Clipped */}
+                    ) : (
                         <div
-                            className="absolute inset-0 w-full h-full overflow-hidden border-r-2 border-white/50 shadow-[0_0_20px_rgba(0,0,0,0.5)] z-20 pointer-events-none bg-emerald-900/20" // Debug BG
-                            style={{ width: `${sliderPosition}%` }}
+                            ref={containerRef}
+                            className="relative w-full h-full cursor-col-resize select-none touch-none bg-zinc-900" // Added dark bg
+                            onPointerDown={handlePointerDown}
+                            onPointerMove={handlePointerMove}
+                            onPointerUp={handlePointerUp}
+                            onDragStart={(e) => e.preventDefault()}
                         >
-                            {/* Use percentage inverse to keep image static while clipping parent */}
-                            <div className="relative h-full" style={{ width: sliderPosition > 0 ? `${100 / (sliderPosition / 100)}%` : '100vw' }}>
+                            {/* Background (After) - z-10 */}
+                            <div className="absolute inset-0 w-full h-full z-10 bg-blue-900/20"> {/* Debug BG */}
+                                {/* Switched to standard img to avoid next/image whitelist issues causing black screen */}
                                 <img
-                                    src={imageSrc}
-                                    alt="Before"
-                                    className="w-full h-full object-contain pointer-events-none select-none block" // Changed to object-contain
+                                    src={resultSrc}
+                                    alt="After"
+                                    className="w-full h-full object-contain pointer-events-none select-none block" // Changed to object-contain to ensuring no cropping issues hide the image
                                     draggable={false}
+                                    style={{ border: '2px solid blue' }} // Debug border
+                                    onError={(e) => {
+                                        console.error("Result image failed to load:", resultSrc);
+                                        e.currentTarget.style.border = "4px solid red"; // Thicker border
+                                        e.currentTarget.style.backgroundColor = "rgba(255,0,0,0.5)";
+                                    }}
                                 />
+                                <div className="absolute top-20 right-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 z-20">
+                                    <span className="text-[10px] uppercase tracking-widest text-primary font-bold">After</span>
+                                </div>
                             </div>
-                            <div className="absolute top-20 left-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-                                <span className="text-[10px] uppercase tracking-widest text-white/80">Before</span>
-                            </div>
-                        </div>
 
-                        {/* Slider Handle */}
-                        <div
-                            className="absolute top-0 bottom-0 w-1 bg-white/0 cursor-col-resize z-20 flex items-center justify-center pointer-events-none"
-                            style={{ left: `${sliderPosition}%` }}
-                        >
-                            <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-xl border border-white/50 shadow-2xl flex items-center justify-center transform transition-transform">
-                                <div className="w-1 h-4 bg-white/80 rounded mx-[1px]" />
-                                <div className="w-1 h-4 bg-white/80 rounded mx-[1px]" />
-                            </div>
-                        </div>
-
-                        {/* Download FAB */}
-                        <div className="absolute bottom-32 right-6 z-30 pointer-events-auto">
-                            <Button
-                                size="icon"
-                                className="rounded-full h-14 w-14 shadow-2xl bg-white text-black hover:bg-white/90 transition-transform hover:scale-105"
-                                onClick={(e) => { e.stopPropagation(); window.open(resultSrc, '_blank'); }}
+                            {/* Foreground (Before) - Clipped - z-30 */}
+                            <div
+                                className="absolute inset-0 w-full h-full overflow-hidden border-r-2 border-white/50 shadow-[0_0_20px_rgba(0,0,0,0.5)] z-30 pointer-events-none bg-emerald-900/20" // Debug BG
+                                style={{ width: `${sliderPosition}%` }}
                             >
-                                <Download className="h-6 w-6" />
-                            </Button>
+                                {/* Use percentage inverse to keep image static while clipping parent */}
+                                <div className="relative h-full" style={{ width: sliderPosition > 0 ? `${100 / (sliderPosition / 100)}%` : '100vw' }}>
+                                    <img
+                                        src={imageSrc}
+                                        alt="Before"
+                                        className="w-full h-full object-contain pointer-events-none select-none block" // Changed to object-contain
+                                        draggable={false}
+                                        style={{ border: '2px solid green' }} // Debug border
+                                    />
+                                </div>
+                                <div className="absolute top-20 left-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                                    <span className="text-[10px] uppercase tracking-widest text-white/80">Before</span>
+                                </div>
+                            </div>
+
+                            {/* Slider Handle - z-40 */}
+                            <div
+                                className="absolute top-0 bottom-0 w-1 bg-white/0 cursor-col-resize z-40 flex items-center justify-center pointer-events-none"
+                                style={{ left: `${sliderPosition}%` }}
+                            >
+                                <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-xl border border-white/50 shadow-2xl flex items-center justify-center transform transition-transform">
+                                    <div className="w-1 h-4 bg-white/80 rounded mx-[1px]" />
+                                    <div className="w-1 h-4 bg-white/80 rounded mx-[1px]" />
+                                </div>
+                            </div>
+
+                            {/* Download FAB */}
+                            <div className="absolute bottom-32 right-6 z-50 pointer-events-auto">
+                                <Button
+                                    size="icon"
+                                    className="rounded-full h-14 w-14 shadow-2xl bg-white text-black hover:bg-white/90 transition-transform hover:scale-105"
+                                    onClick={(e) => { e.stopPropagation(); window.open(resultSrc, '_blank'); }}
+                                >
+                                    <Download className="h-6 w-6" />
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    ))}
 
                 {/* Error Display */}
                 {error && (
