@@ -25,6 +25,7 @@ export default function CameraPage() {
     const [isDragging, setIsDragging] = useState(false)
     const [compareMode, setCompareMode] = useState<'split' | 'overlay'>('split')
     const [sliderPosition, setSliderPosition] = useState(50)
+    const [debugMode, setDebugMode] = useState(false) // [NEW] Toggle Layout
     const containerRef = useRef<HTMLDivElement>(null)
     const router = useRouter()
 
