@@ -2,17 +2,32 @@ import { createClient } from '@/utils/supabase/server'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Plus, ArrowUpRight, User } from 'lucide-react'
+import { Plus, ArrowUpRight, User, Camera, Sparkles } from 'lucide-react'
 
 export default async function DashboardPage() {
     const supabase = await createClient()
-    const { data } = await supabase.auth.getUser()
-    if (!data?.user) return null
+    const { data: { user } } = await supabase.auth.getUser()
 
-    // Fetch recent transformations
+    if (!user) return null
+
+    // 1. Fetch Real Stats
+    // Count 'clients' (assuming table exists, otherwise count distinct client_ids in examples)
+    const { count: clientCount } = await supabase
+        .from('clients')
+        .select('*', { count: 'exact', head: true })
+        .eq('owner_id', user.id)
+
+    // Count 'examples' (generated images)
+    const { count: imageCount } = await supabase
+        .from('examples')
+        .select('*', { count: 'exact', head: true })
+        .eq('owner_id', user.id)
+
+    // 2. Fetch Recent Transformations
     const { data: recent } = await supabase
         .from('examples')
         .select('*')
+        .eq('owner_id', user.id)
         .limit(6)
         .order('created_at', { ascending: false })
 
@@ -30,32 +45,36 @@ export default async function DashboardPage() {
                 </Link>
             </header>
 
-            {/* Stats Grid */}
+            {/* Stats Grid - Now with Real Data */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                 <Card className="glass-card p-8 flex flex-col justify-between h-48 hover:bg-white/10 transition-colors cursor-pointer group rounded-3xl border-0 ring-1 ring-white/10">
                     <div className="flex justify-between items-start">
                         <h3 className="text-xs font-bold text-white/40 uppercase tracking-[0.2em]">Total Clients</h3>
                         <div className="h-2 w-2 rounded-full bg-white/20 group-hover:bg-white transition-colors" />
                     </div>
-                    <p className="text-5xl md:text-6xl font-serif text-white group-hover:translate-x-2 transition-transform">0</p>
+                    <p className="text-5xl md:text-6xl font-serif text-white group-hover:translate-x-2 transition-transform">
+                        {clientCount || 0}
+                    </p>
                 </Card>
                 <Card className="glass-card p-8 flex flex-col justify-between h-48 hover:bg-white/10 transition-colors cursor-pointer group rounded-3xl border-0 ring-1 ring-white/10">
                     <div className="flex justify-between items-start">
                         <h3 className="text-xs font-bold text-white/40 uppercase tracking-[0.2em]">Generated Images</h3>
                         <div className="h-2 w-2 rounded-full bg-sky-500/50 group-hover:bg-sky-400 transition-colors" />
                     </div>
-                    <p className="text-5xl md:text-6xl font-serif text-sky-400 group-hover:translate-x-2 transition-transform">0</p>
+                    <p className="text-5xl md:text-6xl font-serif text-sky-400 group-hover:translate-x-2 transition-transform">
+                        {imageCount || 0}
+                    </p>
                 </Card>
                 <Card className="glass-card p-8 flex flex-col justify-between h-48 hover:bg-white/10 transition-colors cursor-pointer group rounded-3xl border-0 ring-1 ring-white/10">
                     <div className="flex justify-between items-start">
-                        <h3 className="text-xs font-bold text-white/40 uppercase tracking-[0.2em]">Credits Remaining</h3>
+                        <h3 className="text-xs font-bold text-white/40 uppercase tracking-[0.2em]">Credits</h3>
                         <div className="h-2 w-2 rounded-full bg-emerald-500/50 group-hover:bg-emerald-400 transition-colors" />
                     </div>
                     <p className="text-5xl md:text-6xl font-serif text-emerald-400 group-hover:translate-x-2 transition-transform">∞</p>
                 </Card>
             </div>
 
-            {/* Recent Activity Redesign */}
+            {/* Recent Activity */}
             <section className="space-y-8">
                 <div className="flex items-center justify-between">
                     <h3 className="text-3xl font-serif font-light text-white">Recent Activity</h3>
@@ -67,32 +86,44 @@ export default async function DashboardPage() {
 
                 {recent && recent.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-                        {recent.map((item: any) => (
-                            <Link href={`/gallery`} key={item.id} className="group relative block aspect-[3/4] rounded-[2rem] overflow-hidden glass-card transition-all duration-700 hover:scale-[1.01] hover:shadow-2xl hover:shadow-white/5 ring-1 ring-white/10 border-0">
-                                {/* Image */}
-                                <div className="absolute inset-0">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={item.after_url || item.before_url}
-                                        alt="Transformation"
-                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                                    />
-                                    {/* Gradient Overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-                                </div>
+                        {recent.map((item: any) => {
+                            // Check available image, prioritize after, then before
+                            const displayImage = item.after_url || item.before_url;
 
-                                {/* Content Overlay */}
-                                <div className="absolute inset-x-0 bottom-0 p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                                    <p className="text-xs font-bold text-sky-300 tracking-[0.2em] uppercase mb-2 drop-shadow-md">{item.service || 'Transformation'}</p>
-                                    <div className="flex justify-between items-end">
-                                        <p className="text-white text-lg font-serif italic tracking-wide">{new Date(item.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</p>
-                                        <div className="h-12 w-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 hover:bg-white hover:text-black hover:scale-110">
-                                            <ArrowUpRight className="h-6 w-6" />
+                            return (
+                                <Link href={`/gallery`} key={item.id} className="group relative block aspect-[3/4] rounded-[2rem] overflow-hidden glass-card transition-all duration-700 hover:scale-[1.01] hover:shadow-2xl hover:shadow-white/5 ring-1 ring-white/10 border-0">
+                                    {/* Image Container with Fallback */}
+                                    <div className="absolute inset-0 bg-white/5">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        {displayImage ? (
+                                            <img
+                                                src={displayImage}
+                                                alt="Transformation"
+                                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center">
+                                                <Sparkles className="h-12 w-12 text-white/10" />
+                                            </div>
+                                        )}
+
+                                        {/* Reduced Gradient Opacity to show image better */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+                                    </div>
+
+                                    {/* Content Overlay */}
+                                    <div className="absolute inset-x-0 bottom-0 p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out z-10">
+                                        <p className="text-xs font-bold text-sky-300 tracking-[0.2em] uppercase mb-2 drop-shadow-md">{item.service || 'Transformation'}</p>
+                                        <div className="flex justify-between items-end">
+                                            <p className="text-white text-lg font-serif italic tracking-wide">{new Date(item.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</p>
+                                            <div className="h-12 w-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 hover:bg-white hover:text-black hover:scale-110">
+                                                <ArrowUpRight className="h-6 w-6" />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            )
+                        })}
                     </div>
                 ) : (
                     <div className="h-96 rounded-[2.5rem] glass-card flex flex-col items-center justify-center text-white/40 border-2 border-dashed border-white/10 bg-white/[0.02]">
